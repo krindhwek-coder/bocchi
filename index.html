@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snack Attack | PO Makaroni & Popcorn BMKG</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* === COLOR PALETTE & VARIABLES === */
+        :root {
+            --bg-color: #0f172a; /* Dark blue modern */
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-red: #ff4757;
+            --accent-yellow: #ffa502;
+            
+            /* Duolingo Button Colors */
+            --duo-green: #58cc02;
+            --duo-green-shadow: #58a700;
+            --duo-blue: #1cb0f6;
+            --duo-blue-shadow: #1899d6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at top left, rgba(255, 71, 87, 0.1), transparent 40%),
+                              radial-gradient(circle at bottom right, rgba(255, 165, 2, 0.1), transparent 40%);
+        }
+
+        /* === DUOLINGO STYLE BUTTONS === */
+        .btn-duo {
+            display: inline-block;
+            background-color: var(--duo-blue);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 16px 32px;
+            border-radius: 16px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 0 var(--duo-blue-shadow);
+            transition: transform 0.1s, box-shadow 0.1s;
+            user-select: none;
+        }
+
+        .btn-duo:active {
+            transform: translateY(6px);
+            box-shadow: 0 0px 0 var(--duo-blue-shadow);
+        }
+
+        .btn-duo.wa {
+            background-color: var(--duo-green);
+            box-shadow: 0 6px 0 var(--duo-green-shadow);
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .btn-duo.wa:active {
+            box-shadow: 0 0px 0 var(--duo-green-shadow);
+        }
+
+        /* === HERO SECTION === */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .hero-badge {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            color: var(--accent-yellow);
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: slideDown 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        header h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #ff4757, #ffa502);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 500px;
+            margin-bottom: 40px;
+            animation: fadeIn 1s ease forwards 0.5s;
+            opacity: 0;
+        }
+
+        /* Floating elements in background */
+        .float-icon {
+            position: absolute;
+            font-size: 3rem;
+            z-index: -1;
+            opacity: 0.5;
+            animation: float 6s ease-in-out infinite;
+        }
+        .icon-1 { top: 20%; left: 15%; animation-delay: 0s; }
+        .icon-2 { top: 60%; right: 15%; animation-delay: 2s; }
+        .icon-3 { bottom: 20%; left: 20%; animation-delay: 4s; }
+
+        /* === PRODUCTS SECTION === */
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin: 80px 0 40px;
+            font-weight: 800;
+        }
+
+        .products {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 20px;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Glassmorphism Cards */
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            width: 350px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(100px);
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .card-emoji {
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .card-emoji img {
+            border-radius: 20px;
+            object-fit: cover;
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .harga-tag {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 6px 15px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* === PO SYSTEM SECTION === */
+        .po-section {
+            padding: 80px 20px;
+            text-align: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .admin-card {
+            background: #1e293b;
+            padding: 30px 20px;
+            border-radius: 24px;
+            border: 2px solid #334155;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.3s ease, border-color 0.3s;
+        }
+
+        .admin-card:hover {
+            border-color: var(--duo-green);
+        }
+
+        .admin-avatar {
+            width: 70px;
+            height: 70px;
+            background: var(--bg-color);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            border: 2px solid #475569;
+        }
+
+        .admin-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .admin-card span {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* === FIX ANIMASI SCROLL EFFECT ACTIVE (BY JS) === */
+        .card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .admin-card.show {
+            animation: bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* === FOOTER === */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 50px;
+        }
+
+        /* === ANIMATIONS === */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            0% { opacity: 0; transform: translateY(-50px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="float-icon icon-1">🔥</div>
+        <div class="float-icon icon-2">🍿</div>
+        <div class="float-icon icon-3">🌶️</div>
+
+        <div class="hero-badge">✨ Open PO Batch 1 - Kelompok BMKG</div>
+        <h1>Ngemil Enak<br>No Debat.</h1>
+        <p>Cemilan FYP yang bikin nagih dari Kelompok BMKG. Makaroni super renyah & Popcorn karamel lumer. Valid no kecot!</p>
+        <a href="#po" class="btn-duo" style="animation: popIn 1s ease 0.8s forwards; opacity: 0;">Gass Pesan</a>
+    </header>
+
+    <h2 class="section-title">Menu Andalan Kita 🤤</h2>
+    <section class="products">
+        
+        <div class="card animate-scroll">
+            <div class="card-emoji"><img src="gambar/makaron.jpeg" width="128" height="128" alt="Makaroni"></div>
+            <h3 style="color: var(--accent-red);">Makaroni Pedes Mampus</h3>
+            <p>Bumbu medok tumpah-tumpah, teksturnya kriuk parah. Cocok buat nemenin nugas atau drakoran sampe pagi.</p>
+            <div class="harga-tag">Rp 5.000</div>
+        </div>
+
+        <div class="card animate-scroll" style="transition-delay: 0.2s;">
+            <div class="card-emoji"><img src="gambar/popcorn.png" width="128" height="128" alt="Popcorn"></div>
+            <h3 style="color: var(--accent-yellow);">Popcorn Caramel Premium</h3>
+            <p>Karamelnya nge-blend sempurna, manisnya pas nggak bikin eneg. Definisi *comfort snack* yang sesungguhnya.</p>
+            <div class="harga-tag">Rp 8.000</div>
+        </div>
+
+    </section>
+
+    <section id="po" class="po-section">
+        <h2 class="section-title">Pilih Admin Kesayanganmu 👇</h2>
+        <p style="color: var(--text-muted); margin-bottom: 20px;">Sistemnya PO ya ngab. Langsung tap admin yang *available* buat amankan slot lo sekarang!</p>
+        
+        <div class="admin-grid">
+            <div class="admin-card animate-scroll">
+                <div class="admin-avatar">🧑‍💻</div>
+                <h4>Admin Yuda</h4>
+                <span>Fast Response ⚡</span>
+                <a href="https://wa.me/62895623240601?text=P%20min,%20mau%20order%20snack%20Bocchi%20dong!" target="_blank" class="btn-duo wa">Chat Budi</a>
+            </div>
+
+            <div class="admin-card animate-scroll" style="transition-delay: 0.1s;">
+                <div class="admin-avatar">👩‍💻</div>
+                <h4>Admin Yuni</h4>
+                <span>Ramah Banget 🌸</span>
+                <a href="https://wa.me/6285601173768?text=P%20min,%20mau%20order%20snack%20Bocchi%20dong!" target="_blank" class="btn-duo wa">Chat Siti</a>
+            </div>
+
+            <div class="admin-card animate-scroll" style="transition-delay: 0.2s;">
+                <div class="admin-avatar">🥶</div>
+                <h4>Admin Evan</h4>
+                <span>Si Paling Chill 💦</span>
+                <a href="https://wa.me/6287768828475?text=P%20min,%20mau%20order%20snack%20Bocchi%20dong!" target="_blank" class="btn-duo wa">Chat Andi</a>
+            </div>
+
+            <div class="admin-card animate-scroll" style="transition-delay: 0.3s;">
+                <div class="admin-avatar">🤙</div>
+                <h4>Admin Andhica</h4>
+                <span>Paling Keren🤙</span>
+                <a href="https://wa.me/6281234567893?text=P%20min,%20mau%20order%20snack%20Bocchi%20dong!" target="_blank" class="btn-duo wa">Chat Rina</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Snack Attack x Kelompok BMKG. Dibuat dengan 💖 dan Micin.</p>
+    </footer>
+
+    <script>
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1 // Diubah ke 0.1 biar animasi ke-trigger lebih cepet saat di-scroll
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                    observer.unobserve(entry.target); // Biar animasinya jalan sekali aja pas di-scroll
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-scroll').forEach((el) => {
+            observer.observe(el);
+        });
+    </script>
+
+</body>
+</html>
